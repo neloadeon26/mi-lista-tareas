@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Tareas</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; margin: 0; padding: 20px; }
+        .container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #333; }
+        .form-tarea { display: flex; gap: 10px; margin-bottom: 20px; }
+        input[type="text"] { flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; }
+        button { padding: 10px 15px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        button:hover { background-color: #218838; }
+        ul { list-style-type: none; padding: 0; }
+        li { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; }
+        .completada { text-decoration: line-through; color: #888; }
+        .acciones a { text-decoration: none; margin-left: 10px; font-size: 18px; }
+        .btn-eliminar { color: #dc3545; }
+        .btn-completar { color: #007bff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📝 Mi Lista de Tareas</h1>
+        
+        <!-- Formulario para añadir tarea -->
+        <form action="/add" method="POST" class="form-tarea">
+            <input type="text" name="tarea" placeholder="Escribe una nueva tarea..." required>
+            <button type="submit">Añadir</button>
+        </form>
+
+        <!-- Lista de tareas -->
+        <ul>
+            {% for tarea in tareas %}
+            <li>
+                <span class="{% if tarea.completada %}completada{% endif %}">
+                    {{ tarea.descripcion }}
+                </span>
+                <div class="acciones">
+                    {% if not tarea.completada %}
+                    <a href="/complete/{{ loop.index0 }}" class="btn-completar" title="Completar">✅</a>
+                    {% endif %}
+                    <a href="/delete/{{ loop.index0 }}" class="btn-eliminar" title="Eliminar">❌</a>
+                </div>
+            </li>
+            {% else %}
+            <li style="justify-content: center; color: #888;">No hay tareas. ¡Añade una!</li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
